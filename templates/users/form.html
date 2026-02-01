@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit' if item else 'Tambah' }} User{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Edit' if item else 'Tambah' }} User Sistem</h6>
+                    <a href="{{ url_for('users.index') }}" class="btn btn-sm btn-light"><i
+                            class="fas fa-arrow-left me-1"></i> Kembali</a>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('users.edit', id=item.id) if item else url_for('users.create') }}"
+                        method="POST">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Nama Lengkap <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="nama" class="form-control"
+                                    value="{{ item.nama if item else '' }}" required placeholder="Nama Lengkap User">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Username <span class="text-danger">*</span></label>
+                                <input type="text" name="username" class="form-control"
+                                    value="{{ item.username if item else '' }}" required
+                                    placeholder="Username untuk login">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Password {{ '(Kosongkan jika tidak ingin mengubah)' if
+                                    item else '' }}</label>
+                                <input type="password" name="password" class="form-control" {{ 'required' if not item
+                                    else '' }} placeholder="Password">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Role <span class="text-danger">*</span></label>
+                                <select name="role" class="form-select" required>
+                                    <option value="">-- Pilih Role --</option>
+                                    <option value="Admin" {{ 'selected' if item and item.role=='Admin' else '' }}>Admin
+                                    </option>
+                                    <option value="PPK" {{ 'selected' if item and item.role=='PPK' else '' }}>PPK
+                                    </option>
+                                    <option value="Unit Kerja" {{ 'selected' if item and item.role=='Unit Kerja' else ''
+                                        }}>Unit Kerja</option>
+                                    <option value="Viewer" {{ 'selected' if item and item.role=='Viewer' else '' }}>
+                                        Viewer</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Unit Kerja</label>
+                                <select name="unit_kerja_id" class="form-select">
+                                    <option value="">-- Tidak Terikat Unit Kerja --</option>
+                                    {% for unit in units %}
+                                    <option value="{{ unit.id }}" {{ 'selected' if item and item.unit_kerja_id==unit.id
+                                        else '' }}>
+                                        {{ unit.nama_unit }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-12 mt-4 text-end">
+                                <hr>
+                                <button type="reset" class="btn btn-light me-2">Reset</button>
+                                <button type="submit" class="btn btn-primary px-4 shadow-sm">Simpan Data User</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

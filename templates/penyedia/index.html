@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Manajemen Penyedia{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h3 class="fw-bold mb-0 text-gray-800">Manajemen Penyedia</h3>
+        <div>
+            <button type="button" class="btn btn-sm btn-outline-primary shadow-sm me-2" data-bs-toggle="modal"
+                data-bs-target="#importModal">
+                <i class="fas fa-file-import fa-sm me-1"></i> Import Excel
+            </button>
+            <a href="{{ url_for('penyedia.export_excel') }}" class="btn btn-sm btn-outline-success shadow-sm me-2">
+                <i class="fas fa-file-excel fa-sm me-1"></i> Export Excel
+            </a>
+            <a href="{{ url_for('penyedia.create') }}" class="btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-plus fa-sm text-white-50 me-1"></i> Tambah Penyedia</a>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Penyedia / Vendor</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover datatable" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Nama Perusahaan</th>
+                            <th>NPWP</th>
+                            <th>Kualifikasi</th>
+                            <th>Kota</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td class="fw-bold">{{ item.nama_perusahaan }}</td>
+                            <td>{{ item.npwp }}</td>
+                            <td><span class="badge bg-secondary">{{ item.kualifikasi }}</span></td>
+                            <td>{{ item.kota }}</td>
+                            <td>
+                                {% if item.status_aktif %}
+                                <span class="badge bg-success">Aktif</span>
+                                {% else %}
+                                <span class="badge bg-danger">Non-Aktif</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('penyedia.edit', id=item.id) }}"
+                                    class="btn btn-sm btn-info text-white">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ url_for('penyedia.delete', id=item.id) }}" method="POST"
+                                    class="d-inline" onsubmit="return confirm('Yakin ingin menghapus penyedia ini?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="importModalLabel">Import Data Penyedia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('penyedia.import_excel') }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="alert alert-info small mb-3">
+                        <i class="fas fa-info-circle me-1"></i> Format kolom Excel harus memiliki header berikut: <br>
+                        <strong>Nama Perusahaan, NPWP, Nama Direktur, Alamat, Kota, Telepon, Email, Kualifikasi</strong>
+                        <div class="mt-2">
+                            <a href="{{ url_for('penyedia.download_template') }}"
+                                class="btn btn-xs btn-outline-primary py-0 px-2" style="font-size: 0.75rem;">
+                                <i class="fas fa-download fa-xs me-1"></i> Download Template .xlsx
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="file" class="form-label fw-bold">Pilih File Excel (.xlsx / .xls)</label>
+                        <input type="file" class="form-control" name="file" id="file" accept=".xlsx, .xls" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary px-4">Mulai Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

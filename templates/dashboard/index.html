@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="fw-bold mb-4">Dashboard Monitoring</h3>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Paket</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.total_paket }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon-box">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Pagu</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.total_pagu|currency }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon-box">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card orange h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Nilai Kontrak</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.total_kontrak|currency }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon-box">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stat-card h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Penyedia</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.total_penyedia }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon-box">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts and Tables -->
+    <div class="row">
+        <!-- Area Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Deadline Kontrak 10 Terdekat</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Paket</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                    <th>Countdown</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in deadlines %}
+                                <tr>
+                                    <td class="small">{{ item.nama_paket }}</td>
+                                    <td>{{ item.tgl_selesai.strftime('%d %b %Y') if item.tgl_selesai else '-' }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ item.status.lower() }}">{{ item.status }}</span>
+                                    </td>
+                                    <td>
+                                        {% if item.tgl_selesai %}
+                                        {% set remaining = (item.tgl_selesai - today).days %}
+                                        {% if remaining < 0 %} <span class="text-danger fw-bold">Terlewat {{
+                                            remaining|abs }} hari</span>
+                                            {% else %}
+                                            <span class="text-warning fw-bold">{{ remaining }} hari lagi</span>
+                                            {% endif %}
+                                            {% else %}
+                                            -
+                                            {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% if not deadlines %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">Tidak ada data deadline</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Status Pengadaan</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <canvas id="statusChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Pengadaan Terbaru</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Paket</th>
+                                    <th>Jenis</th>
+                                    <th>Pagu</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in recent %}
+                                <tr>
+                                    <td>{{ item.kode_paket }}</td>
+                                    <td>{{ item.nama_paket }}</td>
+                                    <td>{{ item.jenis_pengadaan }}</td>
+                                    <td>{{ item.nilai_pagu|currency }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ item.status.lower() }}">{{ item.status }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('pengadaan.edit', id=item.id) }}"
+                                            class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Status Chart
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    const statusChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ chart_data.labels | tojson }},
+    datasets: [{
+        data: {{ chart_data.counts | tojson }},
+        backgroundColor: ['#ffc107', '#0d6efd', '#198754'],
+        hoverOffset: 4
+            }]
+        },
+    options: {
+        responsive: true,
+            maintainAspectRatio: false,
+                plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+    });
+</script>
+{% endblock %}

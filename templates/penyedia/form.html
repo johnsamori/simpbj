@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit' if item else 'Tambah' }} Penyedia{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Edit' if item else 'Tambah' }} Penyedia / Vendor
+                    </h6>
+                    <a href="{{ url_for('penyedia.index') }}" class="btn btn-sm btn-light"><i
+                            class="fas fa-arrow-left me-1"></i> Kembali</a>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('penyedia.edit', id=item.id) if item else url_for('penyedia.create') }}"
+                        method="POST">
+                        <div class="row">
+                            <!-- Profil Perusahaan -->
+                            <div class="col-12 mb-3">
+                                <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">Profil Perusahaan</h6>
+                            </div>
+
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">Nama Perusahaan <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="nama_perusahaan" class="form-control"
+                                    value="{{ item.nama_perusahaan if item else '' }}" required
+                                    placeholder="Contoh: PT. Maju Bersama">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">NPWP <span class="text-danger">*</span></label>
+                                <input type="text" name="npwp" class="form-control"
+                                    value="{{ item.npwp if item else '' }}" required placeholder="00.000.000.0-000.000">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nama Direktur</label>
+                                <input type="text" name="nama_direktur" class="form-control"
+                                    value="{{ item.nama_direktur if item else '' }}"
+                                    placeholder="Nama Pimpinan/Direktur">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Kualifikasi</label>
+                                <select name="kualifikasi" class="form-select">
+                                    <option value="Kecil" {{ 'selected' if item and item.kualifikasi=='Kecil' else ''
+                                        }}>Kecil</option>
+                                    <option value="Menengah" {{ 'selected' if item and item.kualifikasi=='Menengah'
+                                        else '' }}>Menengah</option>
+                                    <option value="Besar" {{ 'selected' if item and item.kualifikasi=='Besar' else ''
+                                        }}>Besar</option>
+                                </select>
+                            </div>
+
+                            <!-- Kontak & Lokasi -->
+                            <div class="col-12 mb-3 mt-4">
+                                <h6 class="fw-bold border-bottom pb-2 mb-3 text-secondary">Kontak & Lokasi</h6>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Email</label>
+                                <input type="email" name="email" class="form-control"
+                                    value="{{ item.email if item else '' }}" placeholder="email@perusahaan.com">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Telepon</label>
+                                <input type="text" name="telepon" class="form-control"
+                                    value="{{ item.telepon if item else '' }}" placeholder="0812xxxx">
+                            </div>
+
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">Alamat</label>
+                                <textarea name="alamat" class="form-control" rows="2"
+                                    placeholder="Jl. Raya No. 123">{{ item.alamat if item else '' }}</textarea>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Kota</label>
+                                <input type="text" name="kota" class="form-control"
+                                    value="{{ item.kota if item else '' }}" placeholder="Jayapura">
+                            </div>
+
+                            {% if item %}
+                            <div class="col-md-12 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="status_aktif"
+                                        id="status_aktif" {{ 'checked' if item.status_aktif else '' }}>
+                                    <label class="form-check-label fw-bold" for="status_aktif">Status Aktif</label>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="col-12 mt-4 text-end">
+                                <hr>
+                                <button type="reset" class="btn btn-light me-2">Reset</button>
+                                <button type="submit" class="btn btn-primary px-4 shadow-sm">Simpan Data</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

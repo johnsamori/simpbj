@@ -1,0 +1,200 @@
+:root {
+    --uncen-blue: #003366;
+    --uncen-blue-light: #004080;
+    --uncen-orange: #FF6600;
+    --uncen-orange-light: #FF8533;
+    --sidebar-width: 260px;
+    --bg-light: #f4f7f6;
+    --white: #ffffff;
+    --dark: #333333;
+    --gray: #6c757d;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--dark);
+    overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--uncen-blue);
+    color: var(--white);
+    transition: all 0.3s;
+    z-index: 1000;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+#sidebar .sidebar-header img {
+    max-width: 80px;
+    margin-bottom: 10px;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+}
+
+#sidebar ul li {
+    padding: 10px 20px;
+}
+
+#sidebar ul li a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    display: block;
+    transition: 0.3s;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+#sidebar ul li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+#sidebar ul li a:hover, #sidebar ul li.active > a {
+    color: var(--white);
+    background: rgba(255,255,255,0.1);
+    border-left: 4px solid var(--uncen-orange);
+    padding-left: 16px;
+}
+
+/* Main Content Styling */
+#content {
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    transition: all 0.3s;
+    padding: 20px;
+}
+
+/* Navbar Tuning */
+.navbar {
+    background: var(--white);
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Card Styling */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    background-color: var(--white);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-weight: 600;
+    color: var(--uncen-blue);
+}
+
+.card-title {
+    color: var(--uncen-blue);
+    font-weight: 700;
+}
+
+/* Dashboard Stats */
+.stat-card {
+    padding: 20px;
+    border-left: 5px solid var(--uncen-blue);
+}
+
+.stat-card.orange {
+    border-left-color: var(--uncen-orange);
+}
+
+.stat-card .icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: rgba(0, 51, 102, 0.1);
+    color: var(--uncen-blue);
+}
+
+.stat-card.orange .icon-box {
+    background: rgba(255, 102, 0, 0.1);
+    color: var(--uncen-orange);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--uncen-blue);
+    border-color: var(--uncen-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--uncen-blue-light);
+    border-color: var(--uncen-blue-light);
+}
+
+.btn-secondary {
+    background-color: var(--uncen-orange);
+    border-color: var(--uncen-orange);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--uncen-orange-light);
+    border-color: var(--uncen-orange-light);
+    color: white;
+}
+
+/* Tables */
+.table thead th {
+    background: #f8f9fa;
+    color: var(--uncen-blue);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-top: none;
+}
+
+/* Badges */
+.badge-perencanaan { background-color: #ffc107; color: #000; }
+.badge-proses { background-color: #0d6efd; color: #fff; }
+.badge-selesai { background-color: #198754; color: #fff; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #content {
+        width: 100%;
+        margin-left: 0;
+    }
+    #content.active {
+        margin-left: var(--sidebar-width);
+    }
+}

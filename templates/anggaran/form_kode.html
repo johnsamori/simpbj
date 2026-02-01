@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit' if item else 'Tambah' }} Kode Anggaran{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Edit' if item else 'Tambah' }} Kode Anggaran</h6>
+                    <a href="{{ url_for('anggaran.index') }}" class="btn btn-sm btn-light"><i
+                            class="fas fa-arrow-left me-1"></i> Kembali</a>
+                </div>
+                <div class="card-body">
+                    <form
+                        action="{{ url_for('anggaran.edit_kode', id=item.id) if item else url_for('anggaran.create_kode') }}"
+                        method="POST">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">Kode Anggaran <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="kode" class="form-control"
+                                    value="{{ item.kode if item else '' }}" required
+                                    placeholder="Contoh: 001.01.01.01.2026">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Tahun <span class="text-danger">*</span></label>
+                                <select name="tahun" class="form-select" required>
+                                    <option value="2026" {{ 'selected' if item and item.tahun==2026 else '' }}>2026
+                                    </option>
+                                    <option value="2025" {{ 'selected' if item and item.tahun==2025 else '' }}>2025
+                                    </option>
+                                    <option value="2024" {{ 'selected' if item and item.tahun==2024 else '' }}>2024
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Deskripsi / Program Kegiatan</label>
+                                <textarea name="deskripsi" class="form-control" rows="3"
+                                    placeholder="Contoh: Program Dukungan Manajemen . . .">{{ item.deskripsi if item else '' }}</textarea>
+                            </div>
+
+                            {% if item %}
+                            <div class="col-12 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="status_aktif"
+                                        id="status_aktif" {{ 'checked' if item.status_aktif else '' }}>
+                                    <label class="form-check-label fw-bold" for="status_aktif">Status Aktif</label>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="col-12 mt-4 text-end">
+                                <hr>
+                                <button type="reset" class="btn btn-light me-2">Reset</button>
+                                <button type="submit" class="btn btn-primary px-4 shadow-sm">Simpan Data</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

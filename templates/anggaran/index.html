@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Manajemen Anggaran{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h3 class="fw-bold mb-0 text-gray-800">Manajemen Anggaran</h3>
+        <div>
+            <a href="{{ url_for('anggaran.create_kode') }}" class="btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-plus fa-sm me-1"></i> Tambah Kode Anggaran</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Master Kode Anggaran -->
+        <div class="col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Master Kode Anggaran</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover datatable" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Tahun</th>
+                                    <th>Deskripsi</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in kode_items %}
+                                <tr>
+                                    <td><span class="fw-bold">{{ item.kode }}</span></td>
+                                    <td>{{ item.tahun }}</td>
+                                    <td>{{ item.deskripsi }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if item.status_aktif else 'danger' }}">
+                                            {{ 'Aktif' if item.status_aktif else 'Non-Aktif' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ url_for('anggaran.edit_kode', id=item.id) }}"
+                                                class="btn btn-xs btn-info text-white">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form action="{{ url_for('anggaran.delete_kode', id=item.id) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus kode anggaran ini?')">
+                                                <button type="submit" class="btn btn-xs btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Master Akun Anggaran -->
+        <div class="col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Master Akun Anggaran</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover datatable" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Kode Akun</th>
+                                    <th>Nama Akun</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in akun_items %}
+                                <tr>
+                                    <td>{{ item.kode_akun }}</td>
+                                    <td>{{ item.nama_akun }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Pengaturan User{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h3 class="fw-bold mb-0 text-gray-800">Pengaturan User</h3>
+        <a href="{{ url_for('users.create') }}" class="btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-user-plus fa-sm text-white-50 me-1"></i> Tambah User</a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Pengguna Sistem</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover datatable" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Nama Lengkap</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Unit Kerja</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td class="fw-bold">{{ item.nama }}</td>
+                            <td>{{ item.username }}</td>
+                            <td>
+                                <span
+                                    class="badge bg-{{ 'primary' if item.role == 'Admin' else 'info' if item.role == 'PPK' else 'secondary' }}">
+                                    {{ item.role }}
+                                </span>
+                            </td>
+                            <td>{{ item.unit_kerja.nama_unit if item.unit_kerja else '-' }}</td>
+                            <td>
+                                <a href="{{ url_for('users.edit', id=item.id) }}"
+                                    class="btn btn-sm btn-info text-white">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% if current_user.id != item.id %}
+                                <form action="{{ url_for('users.delete', id=item.id) }}" method="POST" class="d-inline"
+                                    onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil Saya{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-user-circle me-1"></i> Pengaturan
+                        Profil</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('auth.profile') }}" method="POST">
+                        <div class="text-center mb-4">
+                            <img src="https://ui-avatars.com/api/?name={{ current_user.nama }}&background=003366&color=fff&size=128"
+                                class="rounded-circle shadow-sm mb-3" width="100" height="100">
+                            <h5 class="fw-bold mb-0">{{ current_user.nama }}</h5>
+                            <span class="badge bg-light text-primary border">{{ current_user.role }}</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nama Lengkap</label>
+                            <input type="text" name="nama" class="form-control" value="{{ current_user.nama }}"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Username</label>
+                            <input type="text" name="username" class="form-control" value="{{ current_user.username }}"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Unit Kerja</label>
+                            <input type="text" class="form-control bg-light"
+                                value="{{ current_user.unit_kerja.nama_unit if current_user.unit_kerja else 'Administrator' }}"
+                                readonly>
+                            <small class="text-muted">Unit kerja tidak dapat diubah sendiri.</small>
+                        </div>
+
+                        <hr class="my-4">
+                        <h6 class="fw-bold text-secondary mb-3">Keamanan</h6>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ubah Password</label>
+                            <input type="password" name="password" class="form-control"
+                                placeholder="Isi hanya jika ingin mengganti password">
+                            <small class="text-muted">Biarkan kosong jika tetap menggunakan password lama.</small>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
